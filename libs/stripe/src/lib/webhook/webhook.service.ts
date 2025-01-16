@@ -1,17 +1,17 @@
-import { Injectable, RawBodyRequest } from '@nestjs/common';
-import { Request } from 'express';
-import { filter, Observable, Subject } from 'rxjs';
-import Stripe from 'stripe';
-import {
+import { Injectable, type RawBodyRequest } from '@nestjs/common';
+import type { Request } from 'express';
+import { type Observable, Subject, filter } from 'rxjs';
+import type Stripe from 'stripe';
+import type {
   BaseDataResponse,
   BaseResponse,
   BaseSaveResponse,
   CreateWebhookEndpointDto,
   ListRequestParamsDto,
   UpdateWebhookEndpointDto,
-  WebhookEndpointDto
+  WebhookEndpointDto,
 } from '../dto';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 import { WebhookEventType } from './event-types.enum';
 
 @Injectable()
@@ -26,8 +26,8 @@ export class WebhookService {
 
   buildEvent(req: RawBodyRequest<Request>): Promise<Stripe.Event> {
     const payload = req.rawBody.toString('utf-8');
-      const headerSignature = req.header('stripe-signature');
-      return this.stripeService.buildWebhookEvent(payload, headerSignature);
+    const headerSignature = req.header('stripe-signature');
+    return this.stripeService.buildWebhookEvent(payload, headerSignature);
   }
 
   notify(evt: Stripe.Event): void {
@@ -36,28 +36,36 @@ export class WebhookService {
 
   subscribeToEvent(type: WebhookEventType): Observable<Stripe.Event> {
     return this._notify$.pipe(
-      filter(evt => type === WebhookEventType.all || evt.type === type)
+      filter((evt) => type === WebhookEventType.all || evt.type === type)
     );
   }
 
-  webhookEndpoints(params?: ListRequestParamsDto): Promise<BaseDataResponse<WebhookEndpointDto[]>>  {
+  webhookEndpoints(
+    params?: ListRequestParamsDto
+  ): Promise<BaseDataResponse<WebhookEndpointDto[]>> {
     return this.stripeService.webhookEndpoints(params);
   }
 
-  webhookEndpointById(webhookEndpointId: string): Promise<BaseDataResponse<WebhookEndpointDto>> {
+  webhookEndpointById(
+    webhookEndpointId: string
+  ): Promise<BaseDataResponse<WebhookEndpointDto>> {
     return this.stripeService.webhookEndpointById(webhookEndpointId);
   }
 
-  createWebhookEndpoint(dto: CreateWebhookEndpointDto): Promise<BaseSaveResponse> {
+  createWebhookEndpoint(
+    dto: CreateWebhookEndpointDto
+  ): Promise<BaseSaveResponse> {
     return this.stripeService.createWebhookEndpoint(dto);
   }
 
-  updateWebhookEndpoint(webhookEndpointId: string, dto: UpdateWebhookEndpointDto): Promise<BaseSaveResponse> {
+  updateWebhookEndpoint(
+    webhookEndpointId: string,
+    dto: UpdateWebhookEndpointDto
+  ): Promise<BaseSaveResponse> {
     return this.stripeService.updateWebhookEndpoint(webhookEndpointId, dto);
   }
 
   deleteWebhookEndpoint(webhookEndpointId: string): Promise<BaseResponse> {
     return this.stripeService.deleteWebhookEndpoint(webhookEndpointId);
   }
-
 }

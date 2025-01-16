@@ -4,7 +4,7 @@ export * from './create-customer.dto';
 export * from './create-subscription.dto';
 export * from './cancel-subscription.dto';
 export * from './payment-item.dto';
-export * from './create-price.dto'
+export * from './create-price.dto';
 export * from './product.data.dto';
 export * from './invoice-preview.dto';
 export * from './base.dto';

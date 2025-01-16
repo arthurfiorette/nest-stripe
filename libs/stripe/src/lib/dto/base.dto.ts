@@ -11,7 +11,8 @@ export class BaseDto {
   active?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Time at which the object was created. Measured in seconds since the Unix epoch.'
+    description:
+      'Time at which the object was created. Measured in seconds since the Unix epoch.',
   })
   created?: number;
 
@@ -19,7 +20,7 @@ export class BaseDto {
   liveMode?: boolean;
 
   @ApiPropertyOptional()
-  metadata?: {[name: string]: string | number | null};
+  metadata?: { [name: string]: string | number | null };
 
   @ApiPropertyOptional()
   updated?: number;

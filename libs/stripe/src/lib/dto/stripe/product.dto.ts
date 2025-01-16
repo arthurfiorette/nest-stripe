@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { BaseDto } from '../base.dto';
 import { PriceDto } from './price.dto';
 
@@ -37,7 +37,7 @@ export class ProductDto extends BaseDto {
   @ApiProperty()
   taxCode: string | Stripe.TaxCode | null;
 
-  @ApiProperty({ enum: ['good', 'service']})
+  @ApiProperty({ enum: ['good', 'service'] })
   type: 'good' | 'service';
 
   @ApiProperty()
@@ -48,5 +48,4 @@ export class ProductDto extends BaseDto {
 
   @ApiPropertyOptional({ isArray: true, type: PriceDto })
   prices?: PriceDto[];
-
 }

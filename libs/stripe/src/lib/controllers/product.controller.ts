@@ -1,26 +1,26 @@
 import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param,
-  Get,
-  Delete,
-  Query
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   BaseDataResponse,
-  CreateProductDto,
-  ListRequestParamsDto,
-  ProductDto,
+  type CreateProductDto,
+  type ListRequestParamsDto,
+  type ProductDto,
   ProductResponse,
-  UpdateProductDto
+  type UpdateProductDto,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Product')
@@ -47,13 +47,17 @@ export class ProductController {
 
   @ApiResponse({ type: ProductResponse })
   @Delete(':productId/delete')
-  deleteProduct(@Param('productId') productId: string): Promise<ProductResponse> {
+  deleteProduct(
+    @Param('productId') productId: string
+  ): Promise<ProductResponse> {
     return this.stripeService.deleteProduct(productId);
   }
 
   @ApiResponse({ type: BaseDataResponse })
   @Get('')
-  productList(@Query() params?: ListRequestParamsDto): Promise<BaseDataResponse<ProductDto[]>> {
+  productList(
+    @Query() params?: ListRequestParamsDto
+  ): Promise<BaseDataResponse<ProductDto[]>> {
     return this.stripeService.getProductList(params);
   }
 
@@ -65,5 +69,4 @@ export class ProductController {
   ): Promise<BaseDataResponse<ProductDto>> {
     return this.stripeService.getProductById(productId);
   }
-
 }

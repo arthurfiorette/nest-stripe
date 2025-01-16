@@ -1,5 +1,5 @@
-const readline = require('readline');
-const fs = require('fs');
+const readline = require('node:readline');
+const fs = require('node:fs');
 
 const filePath = '/libs/stripe/src/lib/webhook/event-types.enum.ts';
 
@@ -9,7 +9,7 @@ const data = file.toString();
 const inputLines = data.split('\n');
 const outputLines = [inputLines[0]];
 
-for(let i = 1; i < inputLines.length; i++) {
+for (let i = 1; i < inputLines.length; i++) {
   const inputLIne = inputLines[i].trim();
   if (inputLIne === '}') {
     outputLines.push(inputLIne);
@@ -29,9 +29,9 @@ for(let i = 1; i < inputLines.length; i++) {
   }
   const chars = inputLIne.split('');
   const outputLine = [];
-  for(let j = 0; j < chars.length; j++) {
+  for (let j = 0; j < chars.length; j++) {
     const char = chars[j];
-    const pChar = chars[j-1];
+    const pChar = chars[j - 1];
     if (char === '_' || char === '.') {
       continue;
     }

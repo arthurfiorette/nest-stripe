@@ -1,21 +1,22 @@
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param,
-  Get} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   BaseDataResponse,
+  type CreateSubscriptionScheduleDto,
   SubscriptionScheduleDto,
-  CreateSubscriptionScheduleDto,
-  UpdateSubscriptionScheduleDto
+  type UpdateSubscriptionScheduleDto,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Subscription Schedule')
@@ -57,5 +58,4 @@ export class SubscriptionScheduleController {
   ): Promise<BaseDataResponse<SubscriptionScheduleDto>> {
     return this.stripeService.releaseSubscriptionSchedule(scheduleId);
   }
-
 }

@@ -1,18 +1,15 @@
 import {
+  Body,
+  Controller,
+  Post,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
-import {
-  CheckoutSessionResponse,
-  CreateCheckoutSessionDto
-} from '../dto';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CheckoutSessionResponse, type CreateCheckoutSessionDto } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Checkout Session')

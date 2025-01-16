@@ -11,7 +11,7 @@ export class WebhookEndpointDto extends BaseDto {
   @ApiProperty()
   description: string;
 
-  @ApiProperty({ isArray: true, type: String})
+  @ApiProperty({ isArray: true, type: String })
   enabledEvents: Array<string>;
 
   @ApiProperty()
@@ -22,5 +22,4 @@ export class WebhookEndpointDto extends BaseDto {
 
   @ApiProperty()
   url: string;
-
 }

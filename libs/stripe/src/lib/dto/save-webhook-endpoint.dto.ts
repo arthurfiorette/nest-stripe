@@ -1,12 +1,19 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsNotEmpty, IsNotEmptyObject, IsOptional, IsString } from 'class-validator';
-import Stripe from 'stripe';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import type Stripe from 'stripe';
 import { WebhookEventType } from '../webhook/event-types.enum';
 
 export class CreateWebhookEndpointDto {
   @ApiProperty({
     enum: WebhookEventType,
-    isArray: true
+    isArray: true,
   })
   @IsEnum(WebhookEventType, { each: true })
   enabledEvents: Array<WebhookEventType>;
@@ -35,7 +42,7 @@ export class CreateWebhookEndpointDto {
 export class UpdateWebhookEndpointDto {
   @ApiPropertyOptional({
     enum: WebhookEventType,
-    isArray: true
+    isArray: true,
   })
   @IsOptional()
   @IsEnum(WebhookEventType, { each: true })

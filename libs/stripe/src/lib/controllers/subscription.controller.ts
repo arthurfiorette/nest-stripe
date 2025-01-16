@@ -1,26 +1,27 @@
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param,
-  Get,
-  Query} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type Stripe from 'stripe';
 import {
   BaseDataResponse,
-  CreateSubscriptionDto,
-  CreateSubscriptionItemDto,
-  ListRequestParamsDto,
-  SubscriptionDto,
+  type CreateSubscriptionDto,
+  type CreateSubscriptionItemDto,
+  type ListRequestParamsDto,
+  type SubscriptionDto,
   SubscriptionResponse,
-  UpdateSubscriptionDto
+  type UpdateSubscriptionDto,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
-import Stripe from 'stripe';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Subscription')
@@ -32,7 +33,9 @@ export class SubscriptionController {
 
   @ApiResponse({ type: SubscriptionResponse })
   @Post('create')
-  createSubscription(@Body() dto: CreateSubscriptionDto): Promise<SubscriptionResponse> {
+  createSubscription(
+    @Body() dto: CreateSubscriptionDto
+  ): Promise<SubscriptionResponse> {
     return this.stripeService.createSubscription(dto);
   }
 
@@ -74,9 +77,8 @@ export class SubscriptionController {
   @Get(':subscriptionId/subscription-items')
   listSubscriptionItems(
     @Param('subscriptionId') subscriptionId: string,
-    @Query() params?: ListRequestParamsDto,
+    @Query() params?: ListRequestParamsDto
   ): Promise<BaseDataResponse<Stripe.SubscriptionItem[]>> {
     return this.stripeService.listSubscriptionItems(subscriptionId, params);
   }
-
 }

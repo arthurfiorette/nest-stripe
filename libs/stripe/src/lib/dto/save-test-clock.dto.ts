@@ -11,7 +11,6 @@ export class SaveTestClockDto {
   @IsOptional()
   @IsNumber()
   frozenTime?: number = Date.now();
-
 }
 
 export class AdvanceTestClockDto {
@@ -19,5 +18,4 @@ export class AdvanceTestClockDto {
   @IsOptional()
   @IsNumber()
   frozenTime?: number = Date.now();
-
 }

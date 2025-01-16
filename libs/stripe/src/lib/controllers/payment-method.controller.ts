@@ -1,20 +1,20 @@
 import {
+  Body,
+  Controller,
+  Param,
+  Post,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  type CreatePaymentMethodDto,
   CreatePaymentMethodResponse,
-  CreatePaymentMethodDto,
-  CustomerResponse
+  type CustomerResponse,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Payment Method')

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { PaymentItemDto } from './payment-item.dto';
 
 export class CreateCheckoutSessionDto {
@@ -11,7 +11,7 @@ export class CreateCheckoutSessionDto {
   metadata?: { [name: string]: string | number | null };
   @ApiPropertyOptional({
     enum: ['payment', 'setup', 'subscription'],
-    default: 'payment'
+    default: 'payment',
   })
   mode: 'payment' | 'setup' | 'subscription';
   @ApiPropertyOptional()
@@ -20,7 +20,7 @@ export class CreateCheckoutSessionDto {
   customer?: string;
 
   @ApiPropertyOptional({
-    enum: ['day', 'month', 'week', 'year']
+    enum: ['day', 'month', 'week', 'year'],
   })
   @IsOptional()
   @IsEnum(['day', 'month', 'week', 'year'])
@@ -29,5 +29,5 @@ export class CreateCheckoutSessionDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
-  recurringIntervalCount?: number
+  recurringIntervalCount?: number;
 }

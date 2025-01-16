@@ -1,23 +1,24 @@
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param,
-  Get,
-  Query} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type Stripe from 'stripe';
 import {
   BaseDataResponse,
-  CreateUsageRecordDto,
+  type CreateUsageRecordDto,
   CreateUsageRecordResponse,
-  ListRequestParamsDto
+  type ListRequestParamsDto,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
-import Stripe from 'stripe';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Usage Record')
@@ -40,9 +41,11 @@ export class UsageRecordController {
   @Get(':subscriptionItemId/usage-record-summaries')
   listUsageRecordSummaries(
     @Param('subscriptionItemId') subscriptionItemId: string,
-    @Query() params?: ListRequestParamsDto,
+    @Query() params?: ListRequestParamsDto
   ): Promise<BaseDataResponse<Stripe.UsageRecordSummary[]>> {
-    return this.stripeService.listUsageRecordSummaries(subscriptionItemId, params);
+    return this.stripeService.listUsageRecordSummaries(
+      subscriptionItemId,
+      params
+    );
   }
-
 }

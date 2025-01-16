@@ -1,30 +1,30 @@
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Query
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type Stripe from 'stripe';
 import {
   BaseDataResponse,
-  CreateCustomerDto,
-  CustomerDto,
+  type CreateCustomerDto,
+  type CustomerDto,
   CustomerResponse,
-  InvoiceDto,
-  ListRequestParamsDto,
-  PaymentMethodDto,
+  type InvoiceDto,
+  type ListRequestParamsDto,
+  type PaymentMethodDto,
   PaymentMethodTypes,
   SubscriptionsResponse,
-  UpdateCustomerDto
+  type UpdateCustomerDto,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
-import Stripe from 'stripe';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Customer')
@@ -53,32 +53,42 @@ export class CustomerController {
   @ApiQuery({
     name: 'useAsDefault',
     type: Boolean,
-    required: false
+    required: false,
   })
   @Post(':customerId/attach-payment-method/:paymentMethodId')
   attachPaymentMethod(
     @Param('customerId') customerId: string,
-    @Param('paymentMethodId')  paymentMethodId: string,
+    @Param('paymentMethodId') paymentMethodId: string,
     @Query('useAsDefault') useAsDefault?: string
   ): Promise<CustomerResponse> {
-    return this.stripeService.attachPaymentMethod(paymentMethodId, customerId, Boolean(useAsDefault));
+    return this.stripeService.attachPaymentMethod(
+      paymentMethodId,
+      customerId,
+      Boolean(useAsDefault)
+    );
   }
 
   @ApiResponse({ type: BaseDataResponse })
   @Get(':customerId')
-  getCustomer(@Param('customerId') customerId: string): Promise<BaseDataResponse<CustomerDto>> {
+  getCustomer(
+    @Param('customerId') customerId: string
+  ): Promise<BaseDataResponse<CustomerDto>> {
     return this.stripeService.getCustomer(customerId);
   }
 
   @ApiResponse({ type: BaseDataResponse })
   @Get(':email/by-email')
-  getCustomerByEmail(@Param('email') email: string): Promise<BaseDataResponse<CustomerDto[]>> {
+  getCustomerByEmail(
+    @Param('email') email: string
+  ): Promise<BaseDataResponse<CustomerDto[]>> {
     return this.stripeService.getCustomersByEmail(email);
   }
 
   @ApiResponse({ type: SubscriptionsResponse })
   @Get(':customerId/subscriptions')
-  customerSubscriptions(@Param('customerId') customerId: string): Promise<SubscriptionsResponse> {
+  customerSubscriptions(
+    @Param('customerId') customerId: string
+  ): Promise<SubscriptionsResponse> {
     return this.stripeService.customerSubscriptions(customerId);
   }
 
@@ -86,7 +96,7 @@ export class CustomerController {
   @Get(':customerId/invoices')
   customerInvoices(
     @Param('customerId') customerId: string,
-    @Query() params: ListRequestParamsDto,
+    @Query() params: ListRequestParamsDto
   ): Promise<BaseDataResponse<InvoiceDto[]>> {
     return this.stripeService.customerInvoices(customerId, params);
   }
@@ -94,7 +104,7 @@ export class CustomerController {
   @ApiResponse({ type: BaseDataResponse })
   @ApiQuery({
     name: 'type',
-    enum: PaymentMethodTypes
+    enum: PaymentMethodTypes,
   })
   @Get(':customerId/payment-method-list')
   customerPaymentMethodList(
@@ -102,16 +112,20 @@ export class CustomerController {
     @Query('type') type: Stripe.PaymentMethodListParams.Type,
     @Query('limit') limit?: number,
     @Query('startingAfter') startingAfter?: string,
-    @Query('endingBefore') endingBefore?: string,
+    @Query('endingBefore') endingBefore?: string
   ): Promise<BaseDataResponse<PaymentMethodDto[]>> {
-    return this.stripeService.customerPaymentMethodList(customerId, type, {limit, startingAfter, endingBefore });
+    return this.stripeService.customerPaymentMethodList(customerId, type, {
+      limit,
+      startingAfter,
+      endingBefore,
+    });
   }
 
   @ApiResponse({ type: SubscriptionsResponse })
   @ApiQuery({
     name: 'status',
     enum: ['accepted', 'canceled', 'draft', 'open'],
-    required: false
+    required: false,
   })
   @Get(':customerId/quotes')
   customerQuotes(
@@ -119,8 +133,12 @@ export class CustomerController {
     @Query('status') status?: Stripe.Quote.Status,
     @Query('limit') limit?: number,
     @Query('startingAfter') startingAfter?: string,
-    @Query('endingBefore') endingBefore?: string,
+    @Query('endingBefore') endingBefore?: string
   ): Promise<SubscriptionsResponse> {
-    return this.stripeService.customerQuoteList(customerId, status, {limit, startingAfter, endingBefore });
+    return this.stripeService.customerQuoteList(customerId, status, {
+      limit,
+      startingAfter,
+      endingBefore,
+    });
   }
 }

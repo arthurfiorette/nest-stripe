@@ -7,7 +7,7 @@ export class CreateUsageRecordDto {
   @IsNumber()
   quantity: number;
 
-  @ApiPropertyOptional({ enum: ['increment', 'set'], default: 'increment'})
+  @ApiPropertyOptional({ enum: ['increment', 'set'], default: 'increment' })
   action?: 'increment' | 'set';
 
   @ApiProperty()

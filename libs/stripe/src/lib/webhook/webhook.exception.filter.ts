@@ -1,7 +1,10 @@
-
-
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  type ArgumentsHost,
+  Catch,
+  type ExceptionFilter,
+  HttpException,
+} from '@nestjs/common';
+import type { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class WebhookExceptionFilter implements ExceptionFilter {
@@ -11,13 +14,11 @@ export class WebhookExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
 
-    response
-      .status(status)
-      .json({
-        message: exception.message,
-        statusCode: status,
-        timestamp: new Date().toISOString(),
-        path: request.url,
-      });
+    response.status(status).json({
+      message: exception.message,
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    });
   }
 }

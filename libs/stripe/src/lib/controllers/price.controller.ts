@@ -1,25 +1,25 @@
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param,
-  Get,
-  Query
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   BaseDataResponse,
-  CreatePriceDto,
-  ListRequestParamsDto,
-  PriceDto,
+  type CreatePriceDto,
+  type ListRequestParamsDto,
+  type PriceDto,
   PriceResponse,
-  UpdatePriceDto
+  type UpdatePriceDto,
 } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Price')
@@ -46,14 +46,17 @@ export class PriceController {
 
   @ApiResponse({ type: BaseDataResponse })
   @Get('')
-  priceList(@Query() params?: ListRequestParamsDto): Promise<BaseDataResponse<PriceDto[]>> {
+  priceList(
+    @Query() params?: ListRequestParamsDto
+  ): Promise<BaseDataResponse<PriceDto[]>> {
     return this.stripeService.getPriceList(undefined, params);
   }
 
   @ApiResponse({ type: BaseDataResponse<PriceDto> })
   @Get(':priceId')
-  priceById(@Param('priceId') priceId: string): Promise<BaseDataResponse<PriceDto>> {
+  priceById(
+    @Param('priceId') priceId: string
+  ): Promise<BaseDataResponse<PriceDto>> {
     return this.stripeService.getPriceById(priceId);
   }
-
 }

@@ -7,7 +7,7 @@ export class InvoiceVoidInvoiceDto {
 
 export class InvoiceFinalizeInvoiceDto {
   @ApiPropertyOptional()
-  autoAdvance?:boolean;
+  autoAdvance?: boolean;
 
   @ApiPropertyOptional({ isArray: true, type: String })
   expand?: Array<string>;

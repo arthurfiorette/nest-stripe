@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { BaseDto } from '../base.dto';
-import { ProductDto } from './product.dto';
+import type { ProductDto } from './product.dto';
 
 export class PlanDto extends BaseDto {
-
-  @ApiProperty({ enum: ['last_during_period', 'last_ever', 'max', 'sum']})
+  @ApiProperty({ enum: ['last_during_period', 'last_ever', 'max', 'sum'] })
   aggregateUsage: 'last_during_period' | 'last_ever' | 'max' | 'sum' | null;
 
   @ApiProperty()
@@ -14,7 +13,7 @@ export class PlanDto extends BaseDto {
   @ApiProperty()
   amountDecimal: string | null;
 
-  @ApiProperty({ enum: ['per_unit', 'tiered']})
+  @ApiProperty({ enum: ['per_unit', 'tiered'] })
   billingScheme: 'per_unit' | 'tiered';
 
   @ApiProperty()
@@ -35,7 +34,7 @@ export class PlanDto extends BaseDto {
   @ApiProperty({ isArray: true, type: Object })
   tiers?: Array<Stripe.Plan.Tier>;
 
-  @ApiProperty({ enum: ['graduated', 'volume']})
+  @ApiProperty({ enum: ['graduated', 'volume'] })
   tiersMode: 'graduated' | 'volume' | null;
 
   @ApiProperty()
@@ -44,7 +43,6 @@ export class PlanDto extends BaseDto {
   @ApiProperty()
   trialPeriodDays: number | null;
 
-  @ApiProperty({ enum: ['licensed', 'metered']})
+  @ApiProperty({ enum: ['licensed', 'metered'] })
   usageType: 'licensed' | 'metered';
-
 }

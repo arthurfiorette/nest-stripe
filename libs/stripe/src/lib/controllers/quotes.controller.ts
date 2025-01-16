@@ -1,16 +1,17 @@
 import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Controller,
-  Post,
-  Body,
-  Param,
-  Query} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiResponse, ApiQuery } from '@nestjs/swagger';
-import { SaveQuoteDto, SaveQuoteResponse } from '../dto';
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { type SaveQuoteDto, SaveQuoteResponse } from '../dto';
 import { StripeAuthGuard } from '../stripe-auth.guard';
-import { StripeService } from '../stripe.service';
+import type { StripeService } from '../stripe.service';
 
 @ApiBearerAuth()
 @ApiTags('Stripe: Quote')
@@ -55,7 +56,7 @@ export class QuotesController {
   @ApiQuery({
     name: 'expiredAt',
     type: 'number',
-    required: false
+    required: false,
   })
   @Post(':quoteId/finalize')
   finalizeQuote(
@@ -64,5 +65,4 @@ export class QuotesController {
   ): Promise<SaveQuoteResponse> {
     return this.stripeService.finalizeQuote(quoteId, expiredAt);
   }
-
 }

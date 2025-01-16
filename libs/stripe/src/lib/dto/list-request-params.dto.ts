@@ -9,5 +9,4 @@ export class ListRequestParamsDto {
 
   @ApiPropertyOptional()
   endingBefore?: string;
-
 }

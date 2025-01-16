@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { BaseDto } from '../base.dto';
-import { PlanDto } from './plan.dto';
-import { PriceDto } from './price.dto';
+import type { PlanDto } from './plan.dto';
+import type { PriceDto } from './price.dto';
 
 export class SubscriptionItemDto extends BaseDto {
   @ApiProperty()

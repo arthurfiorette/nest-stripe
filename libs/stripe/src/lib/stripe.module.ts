@@ -1,6 +1,13 @@
-import { CanActivate, DynamicModule, Module, ModuleMetadata, Provider, Type, } from '@nestjs/common';
+import {
+  type CanActivate,
+  type DynamicModule,
+  Module,
+  type ModuleMetadata,
+  type Provider,
+  type Type,
+} from '@nestjs/common';
 import { STRIPE_AUTH_GUARD } from './stripe-auth.guard';
-import { StripeConfig, STRIPE_CONFIG } from './stripe.config';
+import { STRIPE_CONFIG, type StripeConfig } from './stripe.config';
 // import { StripeController } from './stripe.controller';
 import { StripeLogger } from './stripe.logger';
 import { StripeService } from './stripe.service';
@@ -36,15 +43,13 @@ const controllerList = [
   // TestClocksController,
 
   // StripeController,
-  WebhookController
+  WebhookController,
 ];
 const providerList = [StripeService, StripeLogger, WebhookService];
 const exportList = [StripeService, WebhookService];
 
 export interface StripeConfigFactory {
-  createStripeConfig():
-    | Promise<StripeConfig>
-    | StripeConfig;
+  createStripeConfig(): Promise<StripeConfig> | StripeConfig;
 }
 
 export interface StripeConfigAsyncOptions
@@ -65,7 +70,10 @@ export interface StripeConfigAsyncOptions
   exports: exportList,
 })
 export class StripeModule {
-  static forRoot(config: StripeConfig, authGuard: Type<CanActivate>): DynamicModule {
+  static forRoot(
+    config: StripeConfig,
+    authGuard: Type<CanActivate>
+  ): DynamicModule {
     return {
       module: StripeModule,
       controllers: controllerList,
@@ -76,7 +84,7 @@ export class StripeModule {
         },
         {
           provide: STRIPE_AUTH_GUARD,
-          useClass: authGuard
+          useClass: authGuard,
         },
         ...providerList,
       ],
@@ -84,26 +92,29 @@ export class StripeModule {
     };
   }
 
-  static forRootAsync(options: StripeConfigAsyncOptions, authGuard: Type<CanActivate>): DynamicModule {
+  static forRootAsync(
+    options: StripeConfigAsyncOptions,
+    authGuard: Type<CanActivate>
+  ): DynamicModule {
     const allImports = options.imports;
     return {
       module: StripeModule,
       imports: allImports,
       controllers: controllerList,
       providers: [
-        this.createStripeConfigAsyncProviders(options),
+        StripeModule.createStripeConfigAsyncProviders(options),
         {
           provide: STRIPE_AUTH_GUARD,
-          useClass: authGuard
+          useClass: authGuard,
         },
         ...providerList,
       ],
-      exports: exportList
-    }
+      exports: exportList,
+    };
   }
 
   private static createStripeConfigAsyncProviders(
-    options: StripeConfigAsyncOptions,
+    options: StripeConfigAsyncOptions
   ): Provider {
     if (options) {
       if (options.useFactory) {
@@ -112,20 +123,18 @@ export class StripeModule {
           useFactory: options.useFactory,
           inject: options.inject || [],
         };
-      } else {
-        // For useClass and useExisting...
-        return {
-          provide: STRIPE_CONFIG,
-          useFactory: async (configFactory: StripeConfigFactory) =>
-            await configFactory.createStripeConfig(),
-          inject: [options.useExisting || options.useClass],
-        };
       }
-    } else {
+      // For useClass and useExisting...
       return {
         provide: STRIPE_CONFIG,
-        useValue: {},
+        useFactory: async (configFactory: StripeConfigFactory) =>
+          await configFactory.createStripeConfig(),
+        inject: [options.useExisting || options.useClass],
       };
     }
+    return {
+      provide: STRIPE_CONFIG,
+      useValue: {},
+    };
   }
 }

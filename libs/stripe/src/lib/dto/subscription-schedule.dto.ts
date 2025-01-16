@@ -1,23 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
+import type Stripe from 'stripe';
 import { BaseDto } from './base.dto';
-import { PeriodDto } from './shared.dto';
-import Stripe from 'stripe';
+import type { PeriodDto } from './shared.dto';
 
 const EndBehaviors = ['cancel', 'none', 'release', 'renew'];
-const Statuses = [
-  'active',
-  'canceled',
-  'completed',
-  'not_started',
-  'released',
-]
+const Statuses = ['active', 'canceled', 'completed', 'not_started', 'released'];
 const BillingCycleAnchors = ['automatic', 'phase_start'];
-const ProrationBehaviors =[
-  'always_invoice',
-  'create_prorations',
-  'none',
-]
+const ProrationBehaviors = ['always_invoice', 'create_prorations', 'none'];
 
 export class SchedulePhaseDtoItem {
   @ApiPropertyOptional()
@@ -29,29 +19,28 @@ export class SchedulePhaseDtoItem {
 }
 
 export class SchedulePhaseDto {
-
   @ApiProperty({ enum: BillingCycleAnchors })
-  billingCycleAnchor?:  'automatic' | 'phase_start' | null;
+  billingCycleAnchor?: 'automatic' | 'phase_start' | null;
 
   @ApiPropertyOptional()
   currency?: string;
-  
+
   @ApiPropertyOptional()
   defaultPaymentMethod?: string | null;
-  
+
   @ApiPropertyOptional()
   description?: string | null;
-  
+
   @ApiPropertyOptional()
   endDate?: number;
 
   @ApiPropertyOptional({
     isArray: true,
-    type: SchedulePhaseDtoItem
+    type: SchedulePhaseDtoItem,
   })
   items?: Array<SchedulePhaseDtoItem>;
 
-  @ApiPropertyOptional({ enum: ProrationBehaviors})
+  @ApiPropertyOptional({ enum: ProrationBehaviors })
   prorationBehavior?: Stripe.SubscriptionSchedule.Phase.ProrationBehavior;
 
   @ApiPropertyOptional()
@@ -66,13 +55,13 @@ export class SubscriptionScheduleDto extends BaseDto {
   completedAt: number | null;
 
   @ApiPropertyOptional()
-  currentPhase: PeriodDto
+  currentPhase: PeriodDto;
 
   @ApiPropertyOptional()
   customerId: string;
 
   @ApiPropertyOptional({
-    enum: EndBehaviors
+    enum: EndBehaviors,
   })
   endBehavior: Stripe.SubscriptionSchedule.EndBehavior;
 
@@ -83,7 +72,7 @@ export class SubscriptionScheduleDto extends BaseDto {
   releasedSubscriptionId: string;
 
   @ApiPropertyOptional({
-    enum: Statuses
+    enum: Statuses,
   })
   status: Stripe.SubscriptionSchedule.Status;
 
@@ -92,10 +81,9 @@ export class SubscriptionScheduleDto extends BaseDto {
 
   @ApiPropertyOptional({
     isArray: true,
-    type: SchedulePhaseDto
+    type: SchedulePhaseDto,
   })
-  phases: SchedulePhaseDto[]
-
+  phases: SchedulePhaseDto[];
 }
 
 export class CreateSubscriptionScheduleDto {
@@ -109,7 +97,7 @@ export class CreateSubscriptionScheduleDto {
   defaultSettings?: Stripe.SubscriptionScheduleCreateParams.DefaultSettings;
 
   @ApiPropertyOptional({
-    enum: EndBehaviors
+    enum: EndBehaviors,
   })
   @IsOptional()
   @IsEnum(EndBehaviors)
@@ -123,41 +111,41 @@ export class CreateSubscriptionScheduleDto {
   fromSubscription?: string;
 
   @ApiPropertyOptional()
-  metadata?: {[name: string]: string | number | null};
+  metadata?: { [name: string]: string | number | null };
 
   // TODO: Describe DTO
   @ApiPropertyOptional({
     isArray: true,
-    type: SchedulePhaseDto
+    type: SchedulePhaseDto,
   })
   phases?: Array<SchedulePhaseDto>;
 
   @ApiPropertyOptional({
-    description: `When the subscription schedule starts. We recommend using \`now\` so that it starts the subscription immediately. You can also use a Unix timestamp to backdate the subscription so that it starts on a past date, or set a future date for the subscription to start on.`
+    description:
+      'When the subscription schedule starts. We recommend using `now` so that it starts the subscription immediately. You can also use a Unix timestamp to backdate the subscription so that it starts on a past date, or set a future date for the subscription to start on.',
   })
-  startDate?: number | 'now'
+  startDate?: number | 'now';
 }
 
 export class UpdateSubscriptionScheduleDto {
-
   // TODO: Describe DTO
   @ApiPropertyOptional()
   defaultSettings?: Stripe.SubscriptionScheduleCreateParams.DefaultSettings;
 
   @ApiPropertyOptional({
-    enum: EndBehaviors
+    enum: EndBehaviors,
   })
   @IsOptional()
   @IsEnum(EndBehaviors)
   endBehavior?: Stripe.SubscriptionSchedule.EndBehavior;
 
   @ApiPropertyOptional()
-  metadata?: {[name: string]: string | number | null};
+  metadata?: { [name: string]: string | number | null };
 
   // TODO: Describe DTO
   @ApiPropertyOptional({
     isArray: true,
-    type: SchedulePhaseDto
+    type: SchedulePhaseDto,
   })
   phases?: Array<SchedulePhaseDto>;
 }
